@@ -1,8 +1,9 @@
+version: '3.8'
 
 services:
   frontend:
-    container_name: pizzatech-frontend-dev
     image: lmessia93/pizzatech-front
+    container_name: pizzatech-frontend
     ports:
       - "5173:5173"
     environment:
@@ -10,10 +11,10 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - HOST=0.0.0.0
     command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
- 
+
   backend:
-    container_name: pizzatech-backend-dev
     image: lmessia93/pizzatech-back
+    container_name: pizzatech-backend
     ports:
       - "4000:4000"
     environment:
@@ -23,21 +24,20 @@ services:
       - API_URL=http://localhost:4000/api
       - FRONTEND_URL=http://localhost:5173
     command: ["npm", "run", "dev"]
- 
+
   rocket-ecommerce:
-    restart: always
     image: lmessia93/rocket-ecommerce
+    container_name: rocket-ecommerce
     ports:
-      - "8000:5005"
+      - "5085:5005"
     environment:
       - API_URL=http://localhost:4000/api
       - FRONTEND_URL=http://localhost:5173
- 
+
   task-api:
     image: lmessia93/task-api
+    container_name: task-api
     ports:
       - "8080:8080"
-    restart: unless-stopped
     environment:
       - BASE_URL=http://localhost:4000
-
