@@ -3,8 +3,8 @@ services:
   frontend:
     container_name: pizzatech-frontend-dev
     image: lmessia93/pizzatech-front
-    ports:
-      - "5173:5173"
+    # ports:
+    #   - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:5085/api
       - CHOKIDAR_USEPOLLING=true
@@ -14,8 +14,8 @@ services:
   backend:
     container_name: pizzatech-backend-dev
     image: lmessia93/pizzatech-back
-    ports:
-      - "4000:4000"
+    # ports:
+    #   - "4000:4000"
     environment:
       - DATABASE_URL=file:./dev.db
       - NODE_ENV=development
@@ -27,8 +27,8 @@ services:
   rocket-ecommerce:
     container_name: rocket-ecommerce
     image: lmessia93/rocket-ecommerce
-    ports:
-      - "5005:5005"
+    # ports:
+    #   - "5005:5005"
     environment:
       - API_URL=http://localhost:5085/api
       - FRONTEND_URL=http://localhost:5085
