@@ -61,8 +61,3 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.taskapi.rule=Host(`tasks.localhost`)"
-      - "traefik.http.routers.taskapi.entrypoints=web"
-      - "traefik.http.services.taskapi.loadbalancer.server.port=8080"
