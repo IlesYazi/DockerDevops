@@ -24,8 +24,6 @@ L’ensemble de ces choix vise à garantir une stack DevSecOps robuste, évoluti
 - Publication des images Docker
 - Sécurité & bonnes pratiques
 - Répartition des tâches
-- Contact
-
 ---
 
 ## Présentation
@@ -109,8 +107,8 @@ Toutes les images sont disponibles sur Docker Hub :
 | Membre                      | Rôle / Tâches principales                                                                 |
 |-----------------------------|------------------------------------------------------------------------------------------|
 | **MBARGA Philippe Ivan**    | Lead DevSecOps, coordination du projet, optimisation des images Docker, sécurité globale |
+| **MESSIA DOLIVEUX Lucas**   | Co-lead du projet, propriétaire du Docker Hub, développement et intégration du backend (API Node.js), intégration de Stripe |
 | **Yazi Iles**               | Configuration réseau, documentation                                                      |
-| **MESSIA DOLIVEUX Lucas**   | Développement et intégration du backend (API Node.js), intégration de Stripe             |
 | **LEROGNON Grégoire**       | Développement du frontend (React), intégration avec l’API                                |
 | **NTANTU Japhet**           | Développement du microservice e-commerce, gestion du service task-api, documentation     |
 
