@@ -54,3 +54,4 @@ services:
       - backend
       - rocket-ecommerce
       - task-api
+
