@@ -1,55 +1,68 @@
 services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - --api.insecure=true  
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false  
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"      
+      - "8081:8080"  
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  
+
   frontend:
     container_name: pizzatech-frontend-dev
     image: lmessia93/pizzatech-front
     ports:
-      - "5173:5173"
+      - "5173:5173"  
     environment:
-      - VITE_API_URL=http://nginx:5085/api
+      - VITE_API_URL=http://localhost:4000/api 
       - CHOKIDAR_USEPOLLING=true
       - HOST=0.0.0.0
-    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
- 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+
   backend:
     container_name: pizzatech-backend-dev
     image: lmessia93/pizzatech-back
     ports:
-      - "4000:4000"
+      - "4000:4000"  
     environment:
       - DATABASE_URL=file:./dev.db
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
-      - API_URL=http://nginx:5085/api
-      - FRONTEND_URL=http://nginx:5085
-    command: ["npm", "run", "dev"]
- 
+      - API_URL=http://backend:4000/api
+      - FRONTEND_URL=http://frontend:5173
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=4000"
+
   rocket-ecommerce:
-    restart: always
     image: lmessia93/rocket-ecommerce
+    restart: always
     ports:
-      - "8000:5005"
-    environment:
-      - API_URL=http://nginx:5085/api
-      - FRONTEND_URL=http://nginx:5085
- 
+      - "5085:5005"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rocket.rule=Host(`ecommerce.localhost`)"
+      - "traefik.http.routers.rocket.entrypoints=web"
+      - "traefik.http.services.rocket.loadbalancer.server.port=5005"
+
   task-api:
     image: lmessia93/task-api
     ports:
       - "8080:8080"
     restart: unless-stopped
-    environment:
-      - BASE_URL=http://nginx:5085
- 
-  nginx:
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
-    container_name: nginx
-    restart: always
-    ports:
-      - "5085:5085"
-    depends_on:
-      - frontend
-      - backend
-      - rocket-ecommerce
-      - task-api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.taskapi.rule=Host(`tasks.localhost`)"
+      - "traefik.http.routers.taskapi.entrypoints=web"
+      - "traefik.http.services.taskapi.loadbalancer.server.port=8080"
