@@ -1,51 +1,56 @@
+
 services:
-  ########################################## FRONTEND React ##########################################
   frontend:
     container_name: pizzatech-frontend-dev
     image: lmessia93/pizzatech-front
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:4000/api
+      - VITE_API_URL=http://nginx:5085/api
       - CHOKIDAR_USEPOLLING=true
-    command: ["npm", "run", "dev", "--", "--host"]
-
-  ########################################## BACKEND NODE/EXPRESS/PRISMA (SQLite) ###########################################
+      - HOST=0.0.0.0
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+ 
   backend:
     container_name: pizzatech-backend-dev
-    image : lmessia93/pizzatech-back
+    image: lmessia93/pizzatech-back
     ports:
       - "4000:4000"
     environment:
       - DATABASE_URL=file:./dev.db
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
+      - API_URL=http://nginx:5085/api
+      - FRONTEND_URL=http://nginx:5085
     command: ["npm", "run", "dev"]
-
-########################################## ROCKET ECOMMERCE ###########################################
-
-
+ 
   rocket-ecommerce:
     restart: always
     image: lmessia93/rocket-ecommerce
     ports:
       - "8000:5005"
-  nginx:
-    container_name: nginx
-    restart: always
-    image: "nginx:latest"
-    ports:
-      - "5085:5085"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-
-    depends_on: 
-      - rocket-ecommerce
-  
-########################################## API ###########################################
+    environment:
+      - API_URL=http://nginx:5085/api
+      - FRONTEND_URL=http://nginx:5085
+ 
   task-api:
     image: lmessia93/task-api
     ports:
-      - "8081:8080"
+      - "8080:8080"
     restart: unless-stopped
-    
+    environment:
+      - BASE_URL=http://nginx:5085
+ 
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    container_name: nginx
+    restart: always
+    ports:
+      - "5085:5085"
+    depends_on:
+      - frontend
+      - backend
+      - rocket-ecommerce
+      - task-api
