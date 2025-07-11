@@ -96,7 +96,7 @@ Toutes les images sont disponibles sur Docker Hub :
 | Membre                      | Rôle / Tâches principales                                                                 |
 |-----------------------------|------------------------------------------------------------------------------------------|
 | **MBARGA Philippe Ivan**    | Lead DevSecOps, coordination du projet, optimisation des images Docker, sécurité globale |
-| **Yazi Iles**               | Configuration et sécurisation du reverse proxy Nginx, gestion des accès réseau           |
+| **YAZI Iles**               | Configuration et sécurisation du reverse proxy Nginx, gestion des accès réseau           |
 | **MESSIA DOLIVEUX Lucas**   | Développement et intégration du backend (API Node.js), intégration de Stripe             |
 | **LEROGNON Grégoire**       | Développement du frontend (React), intégration avec l’API, gestion de l’application statique |
 | **NTANTU Japhet**           | Développement du microservice e-commerce, gestion du service task-api, documentation     |
